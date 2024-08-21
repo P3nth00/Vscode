@@ -4,7 +4,7 @@ import os
 
 def start_client():
     host = '192.168.0.119'  # IP do servidor
-    port = 2222
+    port = 2245
 
     try:
         # Cria um socket e conecta ao servidor
