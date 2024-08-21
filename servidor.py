@@ -16,7 +16,7 @@ def handle_client(conn, addr):
 
 def start_server():
     host = '0.0.0.0'
-    port = 2222
+    port = 2245
 
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind((host, port))
