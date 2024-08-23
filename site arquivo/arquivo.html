@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compartilhamento de Arquivos</title>
+</head>
+<body>
+    <h1>Bem-vindo ao nosso site de compartilhamento de arquivos!</h1>
+    <form action="upload.php" method="post" enctype="multipart/form-data">
+        <label for="file">Selecione um arquivo para enviar:</label><br>
+        <input type="file" name="file" id="file"><br>
+        <input type="submit" value="Enviar Arquivo">
+    </form>
+    <h2>Arquivos Compartilhados:</h2>
+    <ul>
+        <!-- Lista de arquivos compartilhados -->
+        <?php
+        // Verifica se o arquivo foi enviado sem erros
+        if(isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
+            $uploadDir = 'uploads/'; // Diretório onde os arquivos serão armazenados
+            $uploadFile = $uploadDir . basename($_FILES['file']['name']); // Caminho completo do arquivo
+
+            // Move o arquivo para o diretório de uploads
+            if(move_uploaded_file($_FILES['file']['tmp_name'], $uploadFile)) {
+                echo "<li><a href='$uploadFile'>$uploadFile</a></li>";
+                echo "Arquivo enviado com sucesso.";
+            } else {
+                echo "Ocorreu um erro ao enviar o arquivo.";
+            }
+        } else {
+            echo "Erro: " . $_FILES['file']['error'];
+        }
+        ?>
+    </ul>
+</body>
+</html>
