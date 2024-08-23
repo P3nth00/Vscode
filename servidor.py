@@ -1,28 +1,38 @@
 import socket
 import threading
+import logging
+
+# Constantes
+MAX_CONEXOES = 5
+PORTA = 2245
+HOST = '0.0.0.0'
+BUFFER_SIZE = 4096
+
+# Configuração de log
+logging.basicConfig(level=logging.INFO)
 
 def handle_client(conn, addr):
-    print(f"Conectado por {addr}")
-    while True:
-        command = input("Digite um comando para enviar ao cliente (ou 'exit' para sair): ")
-        conn.sendall(command.encode())
-        if command.lower() == 'exit':
-            break
-        
-        output = conn.recv(4096).decode()
-        print(output)
-    
-    conn.close()
+    logging.info(f"Conectado por {addr}")
+    try:
+        while True:
+            command = input("Digite um comando para enviar ao cliente (ou 'exit' para sair): ")
+            conn.sendall(command.encode())
+            if command.lower() == 'exit':
+                break
+            
+            output = conn.recv(BUFFER_SIZE).decode()
+            logging.info(output)
+    except Exception as e:
+        logging.error(f"Erro ao lidar com cliente: {e}")
+    finally:
+        conn.close()
 
 def start_server():
-    host = '0.0.0.0'
-    port = 2245
-
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.bind((host, port))
-    server_socket.listen(5)
+    server_socket.bind((HOST, PORTA))
+    server_socket.listen(MAX_CONEXOES)
 
-    print(f"Servidor ouvindo na porta {port}...")
+    logging.info(f"Servidor ouvindo na porta {PORTA}...")
 
     while True:
         conn, addr = server_socket.accept()
